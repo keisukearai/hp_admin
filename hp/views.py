@@ -7,6 +7,7 @@ from django.views.generic import TemplateView
 from django.core import serializers
 
 from hp.models import Company
+from hp.models import News
 
 class CompanyInfoView(TemplateView):
     """
@@ -27,6 +28,30 @@ class CompanyInfoView(TemplateView):
         params = {
             'ret': 'ok',
             'company': company
+        }
+
+        logger.debug(f"{ __class__.__name__ } get end")
+        return JsonResponse(params)
+
+class NewsInfoView(TemplateView):
+    """
+    ニュースの取得
+    """
+
+    def get(self, request):
+        # ログ出力
+        logger = logging.getLogger('hp_admin')
+        logger.debug(f"{ __class__.__name__ } get start")
+
+        # ニュースの取得
+        news = list(News.objects.all().values())
+
+        ##############################
+        # 出力値の設定
+        ##############################
+        params = {
+            'ret': 'ok',
+            'news': news
         }
 
         logger.debug(f"{ __class__.__name__ } get end")

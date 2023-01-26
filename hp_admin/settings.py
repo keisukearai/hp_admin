@@ -132,3 +132,67 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+####################
+# ログ設定
+####################
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    # ログ出力フォーマットの設定
+    'formatters': {
+        'production': {
+            'format': '%(asctime)s [%(levelname)s] %(process)d %(thread)d '
+                      '%(pathname)s:%(lineno)d %(message)s'
+        },
+    },
+    # ハンドラの設定
+    'handlers': {
+        'django_file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/django.log'),
+            'maxBytes': 1024 * 1024 * 10, # 10MB
+            'backupCount': '5',
+            'encoding': 'utf-8',
+            'formatter': 'production',
+        },
+        'hp_admin_file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/hp_admin.log'),
+            'maxBytes': 1024 * 1024 * 10, # 10MB
+            'backupCount': '5',
+            'encoding': 'utf-8',
+            'formatter': 'production',
+        },
+        'console': {
+            'level': 'INFO',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+        }
+    },
+    # ロガーの設定
+    'loggers': {
+        # アプリケーションのロガー
+        'hp_admin': {
+            'handlers': ['hp_admin_file', 'console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        # Django自身が出力するログ全般のロガー
+        'django': {
+            'handlers': ['django_file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}

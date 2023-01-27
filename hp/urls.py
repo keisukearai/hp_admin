@@ -9,4 +9,6 @@ app_name = 'hp'
 urlpatterns = [
     # 会社情報の取得
     path('company', views.CompanyInfoView.as_view(), name='company'),
+    # Newsの取得
+    path('news', views.NewsInfoView.as_view(), name='news'),
 ]

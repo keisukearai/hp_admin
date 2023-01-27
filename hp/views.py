@@ -20,7 +20,8 @@ class CompanyInfoView(TemplateView):
         logger.debug(f"{ __class__.__name__ } get start")
 
         # 会社情報の取得
-        company = list(Company.objects.all().values())
+        query = Company.objects.all()
+        company = list(query.values())
 
         ##############################
         # 出力値の設定
@@ -44,7 +45,8 @@ class NewsInfoView(TemplateView):
         logger.debug(f"{ __class__.__name__ } get start")
 
         # ニュースの取得
-        news = list(News.objects.all().values())
+        query = News.objects.filter(disp_flag = True).order_by('-entry_date')[:3]
+        news = list(query.values())
 
         ##############################
         # 出力値の設定

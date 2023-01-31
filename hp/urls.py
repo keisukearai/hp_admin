@@ -11,4 +11,8 @@ urlpatterns = [
     path('company', views.CompanyInfoView.as_view(), name='company'),
     # Newsの取得
     path('news', views.NewsInfoView.as_view(), name='news'),
+    # News詳細の取得
+    path('news/<int:newsnumber>/', views.NewsDetailInfoView.as_view(), name='newsdetail'),
+    # 問合せ登録
+    path('inquiry', views.InquiryEntryView.as_view(), name='inquiry'),
 ]

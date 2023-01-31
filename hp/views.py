@@ -10,6 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from hp.models import Company
 from hp.models import News
 from hp.models import Inquiry
+from hp.validate import Validate
 
 class CompanyInfoView(TemplateView):
     """
@@ -99,6 +100,9 @@ class InquiryEntryView(TemplateView):
         logger.debug(f"{ __class__.__name__ } post start")
         req = json.loads(request.body)
 
+        # インスタンスの生成
+        validate = Validate()
+
         # 氏名
         name = req.get('name', None)
         # メール
@@ -130,6 +134,14 @@ class InquiryEntryView(TemplateView):
                 'msg_key': 'mail'
             }
             messages.append(dic)
+        else:
+            chk = validate.validate_email(mail)
+            if chk == False:
+                dic = {
+                'msg': 'メールアドレスのフォーマットが不正です。',
+                'msg_key': 'mail'
+                }
+                messages.append(dic)
 
         # 表題チェック
         # 必須

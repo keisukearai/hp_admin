@@ -116,50 +116,83 @@ class InquiryEntryView(TemplateView):
         messages = []
         ret = 'ok'
 
+        ##############################
         # 入力チェック
+        ##############################
         # 名前チェック
         # 必須
-        if name == None:
+        chk = validate.validate_require(name, '名前')
+        if chk != None:
             dic = {
-                'msg': '名前は必須です',
+                'msg': ''.join(chk),
                 'msg_key': 'name'
             }
             messages.append(dic)
+        else:
+            # バイト長
+            chk = validate.validate_max_byte(name, '名前', 128)
+            if chk != None:
+                dic = {
+                    'msg': ''.join(chk),
+                    'msg_key': 'name'
+                }
+                messages.append(dic)
 
         # メールチェック
         # 必須
-        if mail == None:
+        chk = validate.validate_require(mail, 'メール')
+        if chk != None:
             dic = {
-                'msg': 'メールは必須です',
+                'msg': ''.join(chk),
                 'msg_key': 'mail'
             }
             messages.append(dic)
         else:
             chk = validate.validate_email(mail)
-            if chk == False:
+            if chk != None:
                 dic = {
-                'msg': 'メールアドレスのフォーマットが不正です。',
-                'msg_key': 'mail'
+                    'msg': ''.join(chk),
+                    'msg_key': 'mail'
                 }
                 messages.append(dic)
 
         # 表題チェック
         # 必須
-        if title == None:
+        chk = validate.validate_require(title, '表題')
+        if chk != None:
             dic = {
-                'msg': '表題は必須です',
+                'msg': ''.join(chk),
                 'msg_key': 'title'
             }
             messages.append(dic)
+        else:
+            # バイト長
+            chk = validate.validate_max_byte(title, '表題', 128)
+            if chk != None:
+                dic = {
+                    'msg': ''.join(chk),
+                    'msg_key': 'title'
+                }
+                messages.append(dic)
 
         # 内容チェック
         # 必須
-        if content == None:
+        chk = validate.validate_require(content, '内容')
+        if chk != None:
             dic = {
-                'msg': '内容は必須です',
+                'msg': ''.join(chk),
                 'msg_key': 'content'
             }
             messages.append(dic)
+        else:
+            # バイト長
+            chk = validate.validate_max_byte(content, '内容', 2048)
+            if chk != None:
+                dic = {
+                    'msg': ''.join(chk),
+                    'msg_key': 'content'
+                }
+                messages.append(dic)
 
         # 入力チェックあり
         if len(messages) > 0:

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 import json
+import math
 
 from django.http import JsonResponse
 from django.views.generic import TemplateView
@@ -39,7 +40,7 @@ class CompanyInfoView(TemplateView):
 
 class NewsInfoView(TemplateView):
     """
-    ニュースの取得
+    ニュース一覧の取得
     """
 
     def get(self, request):
@@ -47,16 +48,41 @@ class NewsInfoView(TemplateView):
         logger = logging.getLogger('hp_admin')
         logger.debug(f"{ __class__.__name__ } get start")
 
-        # ニュースの取得
-        query = News.objects.filter(disp_flag=True).order_by('-entry_date')[:10]
+        # limit
+        limit = request.GET.get('limit', 5)
+        logger.debug(f"limit:{ limit }")
+
+        # ページ番号
+        page = request.GET.get('page', 1)
+        logger.debug(f"page:{ page }")
+
+        # 検索ワード
+        word = request.GET.get('word', '')
+
+        # offsetの設定
+        if int(page) == 1:
+            offset = 0
+        else:
+            offset = limit * (int(page) - 1)
+
+        # ニュース一覧の取得
+        query = News.objects.filter(disp_flag=True, title__contains=word, content__contains=word).order_by('-entry_date')[offset: offset + limit]
         news = list(query.values())
+
+        # ニュース全件数の取得
+        news_count = News.objects.all().count()
+
+        # トータルページ
+        total_pages = math.ceil(news_count / limit)
 
         ##############################
         # 出力値の設定
         ##############################
         params = {
             'ret': 'ok',
-            'news': news
+            'news_count': news_count,
+            'total_pages': total_pages,
+            'news': news,
         }
 
         logger.debug(f"{ __class__.__name__ } get end")
@@ -98,6 +124,7 @@ class InquiryEntryView(TemplateView):
         # ログ出力
         logger = logging.getLogger('hp_admin')
         logger.debug(f"{ __class__.__name__ } post start")
+        # リクエストの取得
         req = json.loads(request.body)
 
         # インスタンスの生成

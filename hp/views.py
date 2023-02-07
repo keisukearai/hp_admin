@@ -73,7 +73,10 @@ class NewsInfoView(TemplateView):
         news_count = News.objects.filter(disp_flag=True, title__contains=word, content__contains=word).count()
 
         # トータルページ
-        total_pages = math.ceil(news_count / limit)
+        if int(news_count) == 0:
+            total_pages = 0
+        else:
+            total_pages = math.ceil(news_count / limit)
 
         ##############################
         # 出力値の設定

@@ -72,7 +72,7 @@ class NewsInfoView(TemplateView):
         # ニュース全件数の取得
         news_count = News.objects.filter(disp_flag=True, title__contains=word, content__contains=word).count()
 
-        # トータルページ
+        # トータルページの設定
         if int(news_count) == 0:
             total_pages = 0
         else:

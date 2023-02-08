@@ -7,8 +7,11 @@ from django.http import JsonResponse
 from django.views.generic import TemplateView
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+from django.http import Http404
+import db.db_connect as db
 
 from hp.models import Company
+from hp.models import NewsCategory
 from hp.models import News
 from hp.models import Inquiry
 from hp.validate import Validate
@@ -59,18 +62,47 @@ class NewsInfoView(TemplateView):
         # 検索ワード
         word = request.GET.get('word', '')
 
+        # カテゴリ
+        category = request.GET.get('category', '')
+
         # offsetの設定
         if int(page) == 1:
             offset = 0
         else:
             offset = limit * (int(page) - 1)
 
+        # カテゴリ一覧の取得
+        query_category = NewsCategory.objects.all()
+        news_category = list(query_category.values())
+
+        # 全カテゴリをリスト化する
+        category_list = list(query_category.values_list('id', flat=True))
+
+        # カテゴリの設定
+        addWhere = ""
+        if category != '':
+            addWhere = f"and n.category_id = { category }"
+            # リクエストパラメータを再設定
+            category_list = [category]
+        # print(category_list)
+
         # ニュース一覧の取得
-        query = News.objects.filter(disp_flag=True, title__contains=word, content__contains=word).order_by('-entry_date')[offset: offset + limit]
-        news = list(query.values())
+        # query = News.objects.select_related().filter(disp_flag=True, title__contains=word, content__contains=word).order_by('-entry_date')[offset: offset + limit]
+        # print(News.objects.select_related().all().query)
+        # news = list(query.values('category', 'category_id'))
+        sql = ("select "
+                "n.id, n.title, n.content, n.entry_date, category_id, category_name "
+                "from news n inner join newscategory c on n.category_id = c.id "
+                "where n.disp_flag = '1' "
+                f"and (n.title like '%{ word }%' or n.content like '%{ word }%') "
+                f"{ addWhere } "
+                "order by n.entry_date desc "
+                f"limit { limit } offset { offset }")
+        logger.debug(f"sql:{ sql }")
+        news = db.execute(sql)
 
         # ニュース全件数の取得
-        news_count = News.objects.filter(disp_flag=True, title__contains=word, content__contains=word).count()
+        news_count = News.objects.filter(disp_flag=True, title__contains=word, content__contains=word, category_id__in=category_list).count()
 
         # トータルページの設定
         if int(news_count) == 0:
@@ -86,6 +118,7 @@ class NewsInfoView(TemplateView):
             'news_count': news_count,
             'total_pages': total_pages,
             'news': news,
+            'news_category': news_category
         }
 
         logger.debug(f"{ __class__.__name__ } get end")
@@ -104,14 +137,22 @@ class NewsDetailInfoView(TemplateView):
 
         # ニュースの取得
         query = News.objects.filter(disp_flag=True, id=newsnumber)
+        # 取得できない場合
+        if len(query) == 0:
+            raise Http404("Question does not exist")
+
         newsdetail = list(query.values())
+
+        query_category = NewsCategory.objects.filter(id=query[0].category_id)
+        category = list(query_category.values())
 
         ##############################
         # 出力値の設定
         ##############################
         params = {
             'ret': 'ok',
-            'newsdetail': newsdetail
+            'newsdetail': newsdetail,
+            'category': category
         }
 
         logger.debug(f"{ __class__.__name__ } get end")

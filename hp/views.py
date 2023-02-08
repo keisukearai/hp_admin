@@ -92,7 +92,7 @@ class NewsInfoView(TemplateView):
         # news = list(query.values('category', 'category_id'))
         sql = ("select "
                 "n.id, n.title, n.content, category_id, category_name, "
-                "date_format(convert_tz(n.entry_date, '+00:00', '+09:00'), '%Y/%m/%d %H:%k:%s') as entry_date "
+                "convert_tz(n.entry_date, '+00:00', '+09:00') as entry_date "
                 "from news n inner join newscategory c on n.category_id = c.id "
                 "where n.disp_flag = '1' "
                 f"and (n.title like '%{ word }%' or n.content like '%{ word }%') "

@@ -21,7 +21,7 @@
         "model": "hp.newscategory",
         "pk": 1,
         "fields": {
-            "category_name": "#会社"
+            "category_name": "#会社案内"
         }
     },
     {

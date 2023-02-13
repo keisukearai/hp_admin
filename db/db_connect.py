@@ -8,7 +8,7 @@ def dictfetchall(cursor):
         for row in cursor.fetchall()
     ]
 
-def execute(sql):
+def execute(sql, bind={}):
     with connection.cursor() as cursor:
-        cursor.execute(sql)
+        cursor.execute(sql, bind)
         return dictfetchall(cursor)

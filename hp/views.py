@@ -80,7 +80,8 @@ class NewsInfoView(TemplateView):
 
         # カテゴリの設定
         addWhere = ""
-        if category != '':
+        # 設定有りの場合、数値以外はNG
+        if category != '' and category.isnumeric() == True:
             addWhere = f"and n.category_id = { category }"
             # リクエストパラメータを再設定
             category_list = [category]
@@ -90,17 +91,20 @@ class NewsInfoView(TemplateView):
         # query = News.objects.select_related().filter(disp_flag=True, title__contains=word, content__contains=word).order_by('-entry_date')[offset: offset + limit]
         # print(News.objects.select_related().all().query)
         # news = list(query.values('category', 'category_id'))
+        # バインド変数
+        bind = {'word': f"%{ word }%"}
         sql = ("select "
                 "n.id, n.title, n.content, category_id, category_name, "
                 "convert_tz(n.entry_date, '+00:00', '+09:00') as entry_date "
                 "from news n inner join newscategory c on n.category_id = c.id "
                 "where n.disp_flag = '1' "
-                f"and (n.title like '%{ word }%' or n.content like '%{ word }%') "
+                f"and (n.title like %(word)s or n.content like %(word)s) "
                 f"{ addWhere } "
                 "order by n.entry_date desc "
                 f"limit { limit } offset { offset }")
+
         logger.debug(f"sql:{ sql }")
-        news = db.execute(sql)
+        news = db.execute(sql, bind)
 
         # ニュース全件数の取得
         news_count = News.objects.filter(disp_flag=True, title__contains=word, content__contains=word, category_id__in=category_list).count()

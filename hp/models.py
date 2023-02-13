@@ -18,6 +18,7 @@ class Company(models.Model):
     capital = models.CharField(verbose_name="資本金", max_length=10)
     business_bank = models.TextField(verbose_name="取引銀行")
     accounting_period = models.CharField(verbose_name="決算期", max_length=10)
+    corporate_number = models.CharField(verbose_name="法人番号", max_length=15, null=True)
 
     class Meta:
         db_table = 'company'

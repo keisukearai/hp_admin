@@ -14,6 +14,7 @@ from hp.models import Company
 from hp.models import NewsCategory
 from hp.models import News
 from hp.models import Inquiry
+from hp.models import SiteLink
 from hp.validate import Validate
 
 class CompanyInfoView(TemplateView):
@@ -289,4 +290,31 @@ class InquiryEntryView(TemplateView):
         }
 
         logger.debug(f"{ __class__.__name__ } post end")
+        return JsonResponse(params)
+
+class SiteLinkView(TemplateView):
+    """
+    サイトリンク一覧の取得
+    """
+
+    def get(self, request):
+        # ログ出力
+        logger = logging.getLogger('hp_admin')
+        logger.debug(f"{ __class__.__name__ } get start")
+
+        # サイト一覧の取得
+        query = SiteLink.objects.filter(disp_flag=True).order_by('id')
+        print(query.query)
+        sitelink = list(query.values())
+        print(sitelink)
+
+        ##############################
+        # 出力値の設定
+        ##############################
+        params = {
+            'ret': 'ok',
+            'sitelink': sitelink
+        }
+
+        logger.debug(f"{ __class__.__name__ } get end")
         return JsonResponse(params)

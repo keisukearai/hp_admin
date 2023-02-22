@@ -6,8 +6,10 @@ from hp.models import Company
 from hp.models import NewsCategory
 from hp.models import News
 from hp.models import Inquiry
+from hp.models import SiteLink
 
 admin.site.register(Company)
 admin.site.register(NewsCategory)
 admin.site.register(News)
 admin.site.register(Inquiry)
+admin.site.register(SiteLink)

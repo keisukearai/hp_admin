@@ -78,3 +78,21 @@ class Inquiry(models.Model):
     # 管理画面一覧表示時のタイトル
     def __str__(self):
         return f"{ self.title }"
+
+class SiteLink(models.Model):
+    """
+    サイトリンクモデル
+    """
+    title = models.CharField(verbose_name="タイトル", max_length=256)
+    url = models.URLField(verbose_name="サイトURL")
+    content = models.TextField(verbose_name="内容", blank=True, null=True)
+    disp_flag = models.BooleanField(verbose_name="表示フラグ", default=True)
+
+    class Meta:
+        db_table = 'sitelink'
+        verbose_name = f"{ db_table } (サイトリンク)"
+        verbose_name_plural = f"{ db_table } (サイトリンク)"
+
+    # 管理画面一覧表示時のタイトル
+    def __str__(self):
+        return f"{ self.title }"

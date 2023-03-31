@@ -145,7 +145,7 @@ class NewsDetailInfoView(TemplateView):
         query = News.objects.filter(disp_flag=True, id=newsnumber)
         # 取得できない場合
         if len(query) == 0:
-            raise Http404("Question does not exist")
+            raise Http404("News does not exist")
 
         newsdetail = list(query.values())
 
@@ -290,6 +290,30 @@ class InquiryEntryView(TemplateView):
         }
 
         logger.debug(f"{ __class__.__name__ } post end")
+        return JsonResponse(params)
+
+class InquiryCountView(TemplateView):
+    """
+    未確認問い合わせ件数の取得
+    """
+
+    def get(self, request):
+        # ログ出力
+        logger = logging.getLogger('hp_admin')
+        logger.debug(f"{ __class__.__name__ } get start")
+
+        # 未確認問い合わせ件数の取得
+        inquiry_count = Inquiry.objects.filter(confirm_flag=False).count()
+
+        ##############################
+        # 出力値の設定
+        ##############################
+        params = {
+            'ret': 'ok',
+            'inquiry_count': inquiry_count
+        }
+
+        logger.debug(f"{ __class__.__name__ } get end")
         return JsonResponse(params)
 
 class SiteLinkView(TemplateView):

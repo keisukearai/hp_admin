@@ -17,11 +17,12 @@ OWUuP+2l7v30m1o
 mysql -u hp_admin -p
 
 # テーブル再作成
-use hp_db
-drop table company;
-drop table newscategory;
-drop table news;
-drop table inquiry;
+$ use hp_db
+$ drop table company;
+$ drop table newscategory;
+$ drop table news;
+$ drop table inquiry;
+$ drop table sitelink;
 
 # サーバ
 rm -rf /var/www/html/hp_admin/hp/migrations/*.py

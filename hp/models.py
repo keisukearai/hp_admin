@@ -69,6 +69,7 @@ class Inquiry(models.Model):
     name = models.CharField(verbose_name="氏名", max_length=128)
     mail = models.EmailField(verbose_name="メールアドレス", blank=True, null=True)
     content = models.TextField(verbose_name="内容")
+    confirm_flag = models.BooleanField(verbose_name="確認完了フラグ", default=False)
 
     class Meta:
         db_table = 'inquiry'
@@ -77,7 +78,7 @@ class Inquiry(models.Model):
 
     # 管理画面一覧表示時のタイトル
     def __str__(self):
-        return f"{ self.title }"
+        return f"【{ self.confirm_flag }】{ self.title }"
 
 class SiteLink(models.Model):
     """

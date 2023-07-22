@@ -1,18 +1,17 @@
-# マイグレーションファイルの再作成
+# ■マイグレーション
+## マイグレーションファイルの再作成
 python manage.py makemigrations hp
-# 設定クリア
+## 設定クリア
 python manage.py migrate --fake hp zero
-# マイグレーション実施
+## マイグレーション実施
 python manage.py migrate
-
-# データ投入
+## データ投入
 python manage.py loaddata master.json
-
-# 管理ユーザ作成(管理画面)
+## 管理ユーザ作成(管理画面)
 python manage.py createsuperuser<br>
 OWUuP+2l7v30m1o
 
-# テーブル再作成
+# ■テーブル再作成
 ## mysqlログイン
 mysql -u hp_admin -p
 

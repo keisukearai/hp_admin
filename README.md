@@ -19,15 +19,15 @@ mysql -u hp_admin -p
 
 # テーブル再作成
 $ use hp_db
-
+<br>
 $ drop table company;
 <br>
 $ drop table newscategory;
-
+<br>
 $ drop table news;
-
+<br>
 $ drop table inquiry;
-
+<br>
 $ drop table sitelink;
 
 # サーバ

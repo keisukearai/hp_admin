@@ -13,10 +13,10 @@ python manage.py createsuperuser<br>
 OWUuP+2l7v30m1o
 
 # テーブル再作成
-# mysqlログイン
+## mysqlログイン
 mysql -u hp_admin -p
 
-# テーブル再作成
+## テーブル再作成
 $ use hp_db
 <br>
 $ drop table company;
@@ -29,9 +29,9 @@ $ drop table inquiry;
 <br>
 $ drop table sitelink;
 
-# サーバ
+## サーバ
 rm -rf /var/www/html/hp_admin/hp/migrations/*.py
 
-# Windows
+## Windows
 del /S /Q D:\vscode\hp_admin\hp\migrations\*.py<br>
 del /S /Q D:\vscode\hp_admin\hp\migrations\*.pyc

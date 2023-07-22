@@ -70,6 +70,7 @@ class Inquiry(models.Model):
     mail = models.EmailField(verbose_name="メールアドレス", blank=True, null=True)
     content = models.TextField(verbose_name="内容")
     confirm_flag = models.BooleanField(verbose_name="確認完了フラグ", default=False)
+    entry_date = models.DateTimeField(verbose_name="登録日", default=timezone.now)
 
     class Meta:
         db_table = 'inquiry'
@@ -78,7 +79,7 @@ class Inquiry(models.Model):
 
     # 管理画面一覧表示時のタイトル
     def __str__(self):
-        return f"【{ self.confirm_flag }】{ self.title }"
+        return f"【{ self.confirm_flag }】【タイトル】{ self.title }【登録日】{ self.entry_date.strftime('%Y/%m/%d %H:%M:%S') }"
 
 class SiteLink(models.Model):
     """

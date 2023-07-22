@@ -10,6 +10,7 @@ python manage.py loaddata master.json
 
 # 管理ユーザ作成(管理画面)
 python manage.py createsuperuser
+
 OWUuP+2l7v30m1o
 
 # テーブル再作成
@@ -18,10 +19,15 @@ mysql -u hp_admin -p
 
 # テーブル再作成
 $ use hp_db
+
 $ drop table company;
+<br>
 $ drop table newscategory;
+
 $ drop table news;
+
 $ drop table inquiry;
+
 $ drop table sitelink;
 
 # サーバ
@@ -29,4 +35,5 @@ rm -rf /var/www/html/hp_admin/hp/migrations/*.py
 
 # Windows
 del /S /Q D:\vscode\hp_admin\hp\migrations\*.py
+
 del /S /Q D:\vscode\hp_admin\hp\migrations\*.pyc

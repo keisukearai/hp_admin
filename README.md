@@ -34,3 +34,7 @@ rm -rf /var/www/html/hp_admin/hp/migrations/*.py
 ## Windows
 del /S /Q D:\vscode\hp_admin\hp\migrations\*.py<br>
 del /S /Q D:\vscode\hp_admin\hp\migrations\*.pyc
+
+## ■補足
+サーバサイドのターミナルはvscode<br>
+フロントサイドのターミナルはPower Shell

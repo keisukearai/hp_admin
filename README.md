@@ -9,8 +9,7 @@ python manage.py migrate
 python manage.py loaddata master.json
 
 # 管理ユーザ作成(管理画面)
-python manage.py createsuperuser
-
+python manage.py createsuperuser<br>
 OWUuP+2l7v30m1o
 
 # テーブル再作成
@@ -34,6 +33,5 @@ $ drop table sitelink;
 rm -rf /var/www/html/hp_admin/hp/migrations/*.py
 
 # Windows
-del /S /Q D:\vscode\hp_admin\hp\migrations\*.py
-
+del /S /Q D:\vscode\hp_admin\hp\migrations\*.py<br>
 del /S /Q D:\vscode\hp_admin\hp\migrations\*.pyc
